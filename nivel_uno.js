@@ -1,10 +1,10 @@
-console.log("Hello, World!!!");
+console.log(" \n Hello, World!!! Welcome to Program!!!!!");
 
 const prompt = require('prompt-sync')();
 
-let baseDeDatos= [];
+let baseDeDatos= new Map();
 
-let preguntaBucle=true;
+let preguntaBucleUno=true;
 
 function DatosErroneos(){
     console.log(" \n Error!!!, los datos que ingreso son incorrectos");
@@ -14,17 +14,21 @@ function DatosErroneos(){
         if (preguntaBucleDos !== "si" && preguntaBucleDos !== "no") {
             console.log(" \n Error: Por favor ingresa solo (SI/NO)");
             DatosErroneos();
+            return;
         }
 
         if (preguntaBucle === "si"){
             MenuDeInicio();
+            return;
         } else {
-            console.log(" \n El programa a finalizado con exito /_(0o0)_/")
+            console.log(" \n El programa a finalizado con exito /_(0o0)_/");
+            return;
         }
 
     } catch (error){ //Recibe el "error" si pone otra cosa
         console.error(" \n Error: Por favor ingresa solo (SI/NO)");
         DatosErroneos();
+        return;
     }
 }
 
@@ -35,17 +39,21 @@ function VolverAlBucle(){
         if (preguntaBucleTres !== "si" && preguntaBucleTres !== "no") {
             console.log(" \n Error: Por favor ingresa solo (SI/NO)");
             DatosErroneos();
+            return;
         }
 
         if (preguntaBucle === "si") {
             MenuDeInicio();
+            return;
         } else {
-            console.log(" \n El programa a finalizado con exito /_(0o0)_/")
+            console.log(" \n El programa a finalizado con exito /_(0o0)_/");
+            return;
         }
 
     } catch (error){ //Recibe el "error" si pone otra cosa
         console.error(" \n Error: Por favor ingresa solo (SI/NO)");
         DatosErroneos();
+        return;
     }
 }
 
@@ -60,10 +68,10 @@ function SolicitarDatos(){
     return datosUsuarios;
 }
     
-
 function CrearUsuario(id, nombreUsuario, apellidoUsuario, cedulaUsuario,emailUsuario, edadUsuario){ 
-    baseDeDatos.toSorted(id, {"nombre": nombreUsuario, "apellido": apellidoUsuario,"cedula": cedulaUsuario, "email":emailUsuario, "edad": edadUsuario});
+    baseDeDatos.set (id, {"nombre": nombreUsuario, "apellido": apellidoUsuario,"cedula": cedulaUsuario, "email":emailUsuario, "edad": edadUsuario});
     console.log(`\n Usuario con ID: ${id} creado exitosamente \n`);
+    return;
 }
 
 function ActualizarUsuario(id){
@@ -83,7 +91,8 @@ function ActualizarUsuario(id){
                 let idUsuario=baseDeDatos.get(id);
                 idUsuario.nombreUsuario=nombreActualizado;
                 console.log(` \n El nombre: ${nombreActualizado} se actualizo correctamente /(0.0)/`);
-                VolverAlBucle(); 
+                VolverAlBucle();
+                return;
 
             } else if (respuestaDos === 2){
                 let apellidoActualizado=prompt(" \n ingrese el nuevo apellido: ");
@@ -91,6 +100,7 @@ function ActualizarUsuario(id){
                 idUsuario.apellidoUsuario=apellidoActualizado;
                 console.log(` \n El apellido: ${apellidoActualizado} se actualizo correctamente /(0.0)/`);
                 VolverAlBucle();
+                return;
 
             } else if (respuestaDos === 3){
                 let cedulaActualizada=prompt(" \n ingrese la nueva ID(cedula): ");
@@ -98,6 +108,7 @@ function ActualizarUsuario(id){
                 idUsuario.cedulaUsuario= cedulaActualizada;
                 console.log(` \n La cedula: ${cedulaActualizada} se actualizo correctamente /(0.0)/`);
                 VolverAlBucle();
+                return;
 
             } else if (respuestaDos === 4){
                 let emailActualizado=prompt(" \n ingrese la nueva Email: ")
@@ -105,18 +116,22 @@ function ActualizarUsuario(id){
                 idUsuario.emailUsuario=emailActualizado;
                 console.log(` \n eL email: ${emailActualizado} se actualizo correctamente /(0.0)/`);
                 VolverAlBucle();
+                return;
             } else if (respuestaDos === 5){
-                let edadActualizada=prompt(" \n ingrese la nueva edad: ")
+                let edadActualizada=prompt(" \n ingrese la nueva edad: ");
                 let idUsuario=baseDeDatos.get(id);
                 idUsuario.edadUsuario=edadActualizada;
                 console.log(` \n La edad: ${edadActualizada} se actualizo correctamente /(0.0)/`);
                 VolverAlBucle();
+                return;
             } else {
                 DatosErroneos();
+                return;
             }
         }
         catch(error){
             DatosErroneos();
+            return;
         }
     }
 
@@ -131,15 +146,101 @@ function BorrarUsuario(id) {
                 baseDeDatos.delete(id);
                 console.log(` \n El usuario ${id} se elimino de correctamente`);
                 bucle_repetidor();
+                return;
             } else if (preguntaParaEliminar === "no"){
                 MenuDeInicio();
+                return;
             } else {
                 DatosErroneos();
+                return;
             }
         }
         catch(error){
             DatosErroneos();
+            return;
         }    
     }
         
 }
+
+function MenuDeInicio() {
+    while (preguntaBucleUno){
+        console.log(" \n -------------- Menu de Opciones --------------")
+        console.log("Selecciona (1) para crear un usuario")
+        console.log("Selecciona (2) para ver los datos del usuario")
+        console.log("Selecciona (3) para actualizar datos del usuario")
+        console.log("Selecciona (4) para borrar usuario")
+        console.log("Selecciona (5) para salir del programa")
+        
+        try{
+            preguntaUno=prompt(" \n Ingresa un numero del (1/5): ")
+            
+            if (preguntaUno === 1) {
+                datos= SolicitarDatos();
+                CrearUsuario(...datos);
+                return;
+
+            } else if (preguntaUno === 2) {
+
+                if (baseDeDatos.size === 0){
+                    console.log(" \n La base de datos esta vacia, primero cree un usuario")
+                    MenuDeInicio();
+                    return;
+
+                } else if (baseDeDatos.size >= 1){
+                
+                    id= prompt(" \n Ingrese la ID(cedula): ") 
+
+                    if (baseDeDatos.has(id)){
+                            console.log(` \n Nombre: ${baseDeDatos.get(id).nombreUsuarioUsuario} `);
+                            console.log(` \n Apellido: ${baseDeDatos.get(id).apellidoUsuario} `);
+                            console.log(` \n ID: ${baseDeDatos.get(id).cedulaUsuario} `);
+                            console.log(` \n Imail: ${baseDeDatos.get(id).emailUsuario} `);
+                            console.log(` \n Edad: ${baseDeDatos.get(id).edadUsuario} `);
+                            VolverAlBucle();
+                            return;
+                    }
+                } else {
+                    DatosErroneos();
+                    return;
+                }
+
+            } else if (preguntaUno === 3) {
+
+                if (baseDeDatos.size === 0){
+                    console.log(" \n La base de datos esta vacia, primero cree un usuario");
+                    MenuDeInicio();
+                    return;
+                } else {
+                    id=prompt(" \n Ingrese la ID(cedula) para verificar que este en la base de datos: ");
+                    ActualizarUsuario(id);
+                    return;
+                }
+
+            } else if (preguntaUno === 4) {
+
+                if (baseDeDatos.size === 0){
+                    console.log(" \n La base de datos esta vacia, primero cree un usuario");
+                    MenuDeInicio();
+                    return;
+                } else {
+                    id=prompt(" \n Ingrese la ID(cedula) para verificar que este en la base de datos: ");
+                    BorrarUsuario(id);
+                    return;
+                }
+
+            } else if (preguntaUno === 5) {
+                console.log(" \n Programa cerrado con exito");
+                return;
+            } else {
+                DatosErroneos();
+                return;
+            }
+        } catch (error){
+            DatosErroneos();
+            return;
+        }
+    }
+}
+
+let programaIniciado=MenuDeInicio();
